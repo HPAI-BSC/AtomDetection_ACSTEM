@@ -4,6 +4,4 @@ __pycache__
 *.pyc
 
 data
-models
 data_vis
-minio.json
