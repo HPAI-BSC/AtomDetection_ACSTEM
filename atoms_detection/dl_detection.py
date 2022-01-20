@@ -1,5 +1,6 @@
 import os
 from typing import Tuple, List
+import argparse
 
 import torch
 import numpy as np
@@ -10,7 +11,7 @@ from atoms_detection.detection import Detection
 from atoms_detection.training_model import model_pipeline
 from atoms_detection.image_preprocessing import dl_prepro_image
 from utils.constants import ModelArgs
-from utils.paths import PREDS_PATH
+from utils.paths import PREDS_PATH, MODELS_PATH, DETECTION_PATH
 
 
 class DLDetection(Detection):
@@ -108,12 +109,30 @@ class DLDetection(Detection):
         return pred_map
 
 
+def get_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "dataset_csv",
+        type=str,
+        help="Dataset CSV file containing all images to test"
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
+    args = get_args()
+    print(args)
+
+    dataset_name = os.path.splitext(os.path.basename(args.dataset_csv))[0]
+    inference_cache_path = os.path.join(PREDS_PATH, f"dl_cache_{dataset_name}")
+    detections_path = os.path.join(DETECTION_PATH, f"dl_detection_{dataset_name}_0.89")
+
     detection = DLDetection(
         model_name=ModelArgs.BASICCNN,
-        ckpt_filename="/home/fpares/PycharmProjects/stem_atoms/models/basic_replicate.ckpt",
-        dataset_csv="/home/fpares/PycharmProjects/stem_atoms/dataset/HAADF_dataset_noDLtrain.csv",
+        ckpt_filename=os.path.join(MODELS_PATH, "model_existing.ckpt"),
+        dataset_csv=args.dataset_csv,
         threshold=0.89,
-        detections_path=os.path.join(PREDS_PATH, f"dl_detection_tmp_0.89")
+        detections_path=detections_path,
+        inference_cache_path=inference_cache_path
     )
     detection.run()
