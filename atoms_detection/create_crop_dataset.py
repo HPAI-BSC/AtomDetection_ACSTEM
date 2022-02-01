@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from PIL import Image
 
-from atoms_detection.image_preprocessing import dl_prepro_image
+from atoms_detection.image_preprocessing import prepro_image
 from atoms_detection.dataset import CoordinatesDataset
 from utils.paths import CROPS_PATH, CROPS_DATASET, COORDS_DATASET
 from utils.constants import Split, CropsColumns
@@ -61,7 +61,7 @@ def generate_support_img(coordinates, window_size):
 def open_image(img_filename):
     img = Image.open(img_filename)
     np_img = np.asarray(img).astype(np.float32)
-    np_img = dl_prepro_image(np_img)
+    np_img = prepro_image(np_img)
     img = Image.fromarray(np_img)
     return img
 

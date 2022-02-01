@@ -9,7 +9,7 @@ import torch.nn.functional
 
 from atoms_detection.detection import Detection
 from atoms_detection.training_model import model_pipeline
-from atoms_detection.image_preprocessing import dl_prepro_image
+from atoms_detection.image_preprocessing import prepro_image
 from utils.constants import ModelArgs
 from utils.paths import PREDS_PATH, MODELS_PATH, DETECTION_PATH
 
@@ -102,7 +102,7 @@ class DLDetection(Detection):
         return pred_map
 
     def image_to_pred_map(self, img: np.ndarray) -> np.ndarray:
-        preprocessed_img = dl_prepro_image(img)
+        preprocessed_img = prepro_image(img)
         padded_image = self.padding_image(preprocessed_img)
         pred_map = self.get_prediction_map(padded_image)
         pred_map = pred_map.transpose()

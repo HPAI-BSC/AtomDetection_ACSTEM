@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from atoms_detection.image_preprocessing import dl_prepro_image
+from atoms_detection.image_preprocessing import prepro_image
 from atoms_detection.detection import Detection
 
 
@@ -25,7 +25,7 @@ class CVDetection(Detection):
         return filtered_img
 
     def image_to_pred_map(self, img: np.ndarray) -> np.ndarray:
-        prepro_img = dl_prepro_image(img)
+        prepro_img = prepro_image(img)
         filtered_img = self.filter_image(prepro_img)
         filtered_img = filtered_img.transpose()
         return filtered_img
