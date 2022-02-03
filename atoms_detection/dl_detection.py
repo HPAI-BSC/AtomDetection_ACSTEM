@@ -44,12 +44,12 @@ class DLDetection(Detection):
         x_to_center = self.window_size[0] // 2 - 1 if self.window_size[0] % 2 == 0 else self.window_size[0] // 2
         y_to_center = self.window_size[1] // 2 - 1 if self.window_size[1] % 2 == 0 else self.window_size[1] // 2
 
-        for x in range(0, image.shape[0] - self.window_size[0]+1, self.stride):
-            for y in range(0, image.shape[1] - self.window_size[1]+1, self.stride):
+        for y in range(0, image.shape[0] - self.window_size[1]+1, self.stride):
+            for x in range(0, image.shape[1] - self.window_size[0]+1, self.stride):
                 # yield the current window
                 center_x = x + x_to_center
                 center_y = y + y_to_center
-                yield center_x-padding, center_y-padding, image[x:x + self.window_size[0], y:y + self.window_size[1]]
+                yield center_x-padding, center_y-padding, image[y:y + self.window_size[1], x:x + self.window_size[0]]
 
     def batch_sliding_window(self, image: np.ndarray, padding: int = 0) -> Tuple[List[int], List[int], List[np.ndarray]]:
         x_idx_list = []
@@ -98,14 +98,13 @@ class DLDetection(Detection):
             output = model(torch_input)
             pred_prob = torch.nn.functional.softmax(output, 1)
             pred_prob = pred_prob.detach().cpu().numpy()[:, 1]
-            pred_map[np.array(x_idxs), np.array(y_idxs)] = pred_prob
+            pred_map[np.array(y_idxs), np.array(x_idxs)] = pred_prob
         return pred_map
 
     def image_to_pred_map(self, img: np.ndarray) -> np.ndarray:
         preprocessed_img = prepro_image(img)
         padded_image = self.padding_image(preprocessed_img)
         pred_map = self.get_prediction_map(padded_image)
-        pred_map = pred_map.transpose()
         return pred_map
 
 
