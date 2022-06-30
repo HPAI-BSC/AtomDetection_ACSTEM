@@ -1,3 +1,6 @@
+This repository contains the software used in the paper [Automated Image Analysis for Single-Atom Detection in Catalytic Materials by Transmission Electron Microscopy](https://pubs.acs.org/doi/10.1021/jacs.1c12466) published in the Journal of the American Chemical Society.
+If you use the resources of this repository, please cite the reference work.
+
 # AC-STEM atom localization
 
 Atom localization on AC-STEM (Aberration-Corrected Scanning Transmission Electron Microscopy) images.
